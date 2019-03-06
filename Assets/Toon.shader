@@ -38,5 +38,23 @@
         }
 
         ENDCG
+
+        // Pass
+        // {
+        //     CGPROGRAM
+        //     #pragma vertex vert
+        //     #pragma fragment frag
+
+        //     #include "UnityCG.cginc"
+
+        //     struct appdata
+        //     {
+        //         float4 vertex: POSITION;
+        //         // float2 uv: TEXCORD0;
+        //         float3 normal: NORMAL;
+        //     };
+
+        //     ENDCG
+        // }
     }
 }
