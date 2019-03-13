@@ -7,16 +7,36 @@
         _RampTex("Ramp Texture", 2D) = "white" {}
         _OutlineColor("Outline Color", Color) = (0, 0, 0, 1)
         _OutlineSize("Outline Size", Range(0.001, 0.1)) = 0.05
+        _RimColor ("Rim Color", Color) = (1, 1, 1, 1)
+		_RimPower ("Rim Power", Range(0.5, 8.0)) = 1
+        _BumpTex("Normal", 2D) = "bump" {}
+		_NormalAmount("Normal Amount", Range(-3, 3)) = 1
     }
 
     SubShader
     {
+        LOD 200
+
         CGPROGRAM
         #pragma surface surf ToonRamp
 
-        float4 _Albedo;
         sampler2D _MainTex;
         sampler2D _RampTex;
+        sampler2D _BumpTex;
+
+        float4 _Albedo;
+
+        float4 _RimColor;
+    	float _RimPower;
+        
+        float _NormalAmount;
+
+        struct Input
+        {
+            float2 uv_MainTex;
+            float2 uv_BumpTex;
+            float3 viewDir;
+        };
 
         float4 LightingToonRamp(SurfaceOutput s, fixed2 lightDir, fixed atten)
         {
@@ -29,20 +49,26 @@
             return c;
         }
 
-        struct Input
-        {
-            float2 uv_MainTex;
-        };
-
         void surf(Input IN, inout SurfaceOutput o)
         {
             o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb * _Albedo.rgb;
+            
+            // Rim lighting
+            half rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
+         	o.Emission = _RimColor.rgb * pow (rim, _RimPower);
+
+            // Normal mapping
+            float3 normal = UnpackNormal(tex2D(_BumpTex, IN.uv_BumpTex));
+			normal.z = normal.z / _NormalAmount;
+			o.Normal = normal;
         }
 
         ENDCG
-
+//ola Mesitha
         Pass
         {
+            Cull Front 
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
