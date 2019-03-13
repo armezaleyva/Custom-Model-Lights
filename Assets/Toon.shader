@@ -52,7 +52,7 @@
         void surf(Input IN, inout SurfaceOutput o)
         {
             o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb * _Albedo.rgb;
-            
+
             // Rim lighting
             half rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
          	o.Emission = _RimColor.rgb * pow (rim, _RimPower);
@@ -64,7 +64,7 @@
         }
 
         ENDCG
-//ola Mesitha
+        
         Pass
         {
             Cull Front 
