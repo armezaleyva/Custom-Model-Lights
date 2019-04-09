@@ -4,10 +4,10 @@
     {
         _Albedo("Albedo", Color) = (1, 1, 1, 1)
     }
-    
+
     SubShader
     {
-        Tags 
+        Tags
         {
             "Queue" = "Geometry"
         }
@@ -15,11 +15,13 @@
         CGPROGRAM
             #pragma surface surf BasicLambert
 
-            half4 LightingBasicLambert(SurfaceOutput s, half3 lightDir, half atten)
+            half4 LightingBasicLambert(SurfaceOutput s, 
+            half3 lightDir, half atten)
             {
                 half NdotL = dot(s.Normal, lightDir);
-                half4 c; // c por su abreviación en física, en Computer Graphics c representa color y la luz es un color
-                c.rgb = s.Albedo * _LightColor0.rgb * (NdotL * atten);
+                half4 c;
+                c.rgb = s.Albedo * _LightColor0.rgb 
+                * (NdotL * atten); 
                 c.a = s.Alpha;
                 return c;
             }
@@ -35,7 +37,6 @@
             {
                 o.Albedo = _Albedo.rgb;
             }
-
         ENDCG
     }
 }
